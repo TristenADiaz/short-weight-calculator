@@ -1,5 +1,4 @@
-import gui.*;
-import javax.swing.JFrame;
+import gui.guiTotes;
 
 public class Main {
 

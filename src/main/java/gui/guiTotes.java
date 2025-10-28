@@ -1,15 +1,30 @@
 package gui;
 
-import filters.KeyInputHandler;
-import java.awt.*;
+import java.awt.AlphaComposite;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.Graphics2D;
+import java.awt.GridLayout;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.text.DecimalFormat;
-import java.util.Arrays;
+
 import javax.imageio.ImageIO;
-import javax.swing.*;
+import javax.swing.BorderFactory;
+import javax.swing.ButtonGroup;
+import javax.swing.ImageIcon;
+import javax.swing.JFormattedTextField;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.text.NumberFormatter;
+
+import filters.KeyInputHandler;
 import math.WeightMath;
 
 
@@ -18,13 +33,13 @@ public class guiTotes {
 
     private final JFrame frame = new JFrame();
     private final JPanel contentPane = new JPanel();
-    private final Container contentPaneNums = new JPanel();
     private final JFormattedTextField toteEntryField = new  JFormattedTextField(new NumberFormatter());
     private final JLabel entryToteLabel = new JLabel("Weight on Scale:");
     private final JLabel endToteWeightLabel = new JLabel("Manifest Weight:");
     private final JLabel endToteWeight = new JLabel("0.00");
     private final JLabel errorLabel = new JLabel("ENTER WEIGHT FROM SCALE HEAD!");
-    private final JLabel background = new JLabel(new ImageIcon(getIcon().getImage().getScaledInstance(750/2,376/2,100)));
+    private final ImageIcon bgImage =  new ImageIcon(getIcon().getImage());
+    private final JLabel background = new JLabel(new ImageIcon(transparentImageIcon(bgImage,0.5f).getImage().getScaledInstance(750/2,376/2,100)));
     private final JPanel productPanel = new JPanel();
     private final JPanel materialPanel = new JPanel();
 
@@ -35,7 +50,7 @@ public class guiTotes {
     private final ButtonGroup matRadioGroup = new ButtonGroup();
 
     private static WeightMath.Product currentProduct = WeightMath.Product.BSB;
-    public static boolean isCardboard = true, isPlastic = false;
+    public static boolean isCardboard = true;
 
 
 /**
@@ -49,14 +64,15 @@ public class guiTotes {
 
 
     private void init() {
+
+
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setMinimumSize(new Dimension(400,350));
         frame.setLocationRelativeTo(null);
         frame.setResizable(false);
         frame.setTitle("Short-Weight Calculator");
         // Create an ImageIcon from the loaded image
-        ImageIcon icon = new ImageIcon(getIcon().getImage());
-        frame.setIconImage(icon.getImage().getScaledInstance(750,376,100));
+        frame.setIconImage(bgImage.getImage().getScaledInstance(750,376,100));
         frame.add(background);
         // Add the document filter to text field for numeric and length check.
 
@@ -131,7 +147,6 @@ public class guiTotes {
         contentPane.setBackground(new Color(0,0,0));
 
         background.add(contentPane, BorderLayout.CENTER);
-        background.setSize(350,310);
 
     }
     private void buildRadioButtons(String[] buttons, JPanel panel,ButtonGroup group){
@@ -159,10 +174,8 @@ public class guiTotes {
                                 break;
                             case "cardboard":
                                 isCardboard = true;
-                                isPlastic = false;
                                 break;
                             case "plastic":
-                                isPlastic = true;
                                 isCardboard = false;
                                 break;
                         }
@@ -196,6 +209,33 @@ public class guiTotes {
         return new ImageIcon(webpImage);
     }
 
+    private ImageIcon transparentImageIcon(ImageIcon originalIcon, float opacity) {
+        // Ensure opacity is within the valid range [0.0, 1.0]
+        if (opacity < 0.0f) opacity = 0.0f;
+        if (opacity > 1.0f) opacity = 1.0f;
+        
+        // Get dimensions from the original icon
+        int w = originalIcon.getIconWidth();
+        int h = originalIcon.getIconHeight();
+
+        // Create a new BufferedImage with an alpha channel
+        BufferedImage newIconImg = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+        
+        // Get the Graphics2D object to draw on the new image
+        Graphics2D g = newIconImg.createGraphics();
+
+        // Set the composite with the specified opacity
+        g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, opacity));
+
+        // Draw the original icon onto the new, transparent image
+        originalIcon.paintIcon(null, g, 0, 0);
+        
+        // Dispose of the graphics object
+        g.dispose();
+
+        // Set this class's image to the new, transparent image
+        return new ImageIcon(newIconImg);
+    }
 
     public static WeightMath.Product getCurrentProduct() {
         return currentProduct;
