@@ -14,14 +14,7 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
-import javax.swing.BorderFactory;
-import javax.swing.ButtonGroup;
-import javax.swing.ImageIcon;
-import javax.swing.JFormattedTextField;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JRadioButton;
+import javax.swing.*;
 import javax.swing.text.NumberFormatter;
 
 import filters.KeyInputHandler;
@@ -31,7 +24,8 @@ import math.WeightMath;
 
 public class guiTotes {
 
-    private final JFrame frame = new JFrame();
+    private JFrame frame;
+    private JMenuBar menuBar;
     private final JPanel contentPane = new JPanel();
     private final JFormattedTextField toteEntryField = new  JFormattedTextField(new NumberFormatter());
     private final JLabel entryToteLabel = new JLabel("Weight on Scale:");
@@ -42,6 +36,7 @@ public class guiTotes {
     private final JLabel background = new JLabel(new ImageIcon(transparentImageIcon(bgImage,0.5f).getImage().getScaledInstance(750/2,376/2,100)));
     private final JPanel productPanel = new JPanel();
     private final JPanel materialPanel = new JPanel();
+
 
 
     private final String[] buttons_material = new String[] {"Cardboard"," Plastic"};
@@ -58,7 +53,8 @@ public class guiTotes {
  * add buttons
  * auto-clear/add clear button
  * */
-    public guiTotes(){
+    public guiTotes(JFrame frame){
+        this.frame = frame;
         showGUI(frame);
     }
 
@@ -70,7 +66,10 @@ public class guiTotes {
         frame.setMinimumSize(new Dimension(400,350));
         frame.setLocationRelativeTo(null);
         frame.setResizable(false);
-        frame.setTitle("Short-Weight Calculator");
+        frame.setTitle("Manifest Calculator");
+        //Add menu bar
+        this.menuBar = new MenuBar(frame);
+        //frame.setJMenuBar(menuBar);
         // Create an ImageIcon from the loaded image
         frame.setIconImage(bgImage.getImage().getScaledInstance(750,376,100));
         frame.add(background);

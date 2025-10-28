@@ -7,15 +7,12 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
+import javax.swing.*;
 
 public class guiFrame extends JFrame {
 
-    private final JFrame frame = new JFrame();
+    private JFrame frame;
+    private JMenuBar menuBar;
     private final Container contentPane = new JPanel();
     private final Container contentPaneNums = new JPanel();
     private final JLabel numberLabel = new JLabel("0");
@@ -24,7 +21,8 @@ public class guiFrame extends JFrame {
     private final String[] numButtons = new String[] {"9","8","7","6","5","4","3","2","1","+/-","0","."};
     private final String[] endButtons = new String[] {"/","*","+","-","="};
 
-    public guiFrame() {
+    public guiFrame(JFrame frame) {
+        this.frame = frame;
         showGUI(frame);
     }
 
@@ -33,11 +31,13 @@ public class guiFrame extends JFrame {
         frame.setSize(400, 550);
         frame.setLocationRelativeTo(null);
         frame.setResizable(false);
-        frame.setTitle("Short-Weight Calculator");
-
+        frame.setTitle("Remainder Calculator");
+        this.menuBar = new MenuBar(frame);
+        frame.setJMenuBar(menuBar);
     }
 
     private void showGUI(JFrame frame) {
+
         init();
         buildGUI();
         frame.setVisible(true);
