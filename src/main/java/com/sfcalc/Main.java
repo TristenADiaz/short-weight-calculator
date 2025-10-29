@@ -1,3 +1,5 @@
+package com.sfcalc;
+
 import gui.guiTotes;
 
 import javax.swing.*;

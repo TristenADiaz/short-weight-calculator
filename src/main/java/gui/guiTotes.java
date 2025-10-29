@@ -10,8 +10,8 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.GridLayout;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
+import java.util.Objects;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -32,7 +32,7 @@ public class guiTotes {
     private final JLabel endToteWeightLabel = new JLabel("Manifest Weight:");
     private final JLabel endToteWeight = new JLabel("0.00");
     private final JLabel errorLabel = new JLabel("ENTER WEIGHT FROM SCALE HEAD!");
-    private final ImageIcon bgImage =  new ImageIcon(getIcon().getImage());
+    private final ImageIcon bgImage =  getIcon();
     private final JLabel background = new JLabel(new ImageIcon(transparentImageIcon(bgImage,0.5f).getImage().getScaledInstance(750/2,376/2,100)));
     private final JPanel productPanel = new JPanel();
     private final JPanel materialPanel = new JPanel();
@@ -199,13 +199,32 @@ public class guiTotes {
     }
 
     private ImageIcon getIcon(){
-        BufferedImage webpImage = null;
-        try {
-            webpImage = ImageIO.read(new File("src/main/resources/icon/simmonspf.webp"));
+        String imagePath = "/icon/simmonspf.png";
+        BufferedImage image = null;
+
+        // Try-with-resources automatically closes the InputStream
+        try (InputStream inputStream = getClass().getResourceAsStream(imagePath)) {
+
+            // Step 1: Check if the resource was found
+            if (inputStream == null) {
+                System.err.println("Resource not found: " + imagePath);
+                return null;
+            }
+
+            // Step 2: Attempt to read the image
+            image = ImageIO.read(inputStream);
+
+            // Step 3: Check if ImageIO.read() was successful
+            if (image == null) {
+                System.err.println("ImageIO.read failed to decode the stream. Is the file corrupted or an unsupported format?");
+            }
+
         } catch (IOException e) {
+            System.err.println("An IOException occurred while reading the image.");
             e.printStackTrace();
         }
-        return new ImageIcon(webpImage);
+
+        return new ImageIcon(image);
     }
 
     private ImageIcon transparentImageIcon(ImageIcon originalIcon, float opacity) {

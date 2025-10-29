@@ -1,3 +1,8 @@
 *.class
 *.class
 /out
+*.bin
+/.gradle
+/build
+/target
+*.class
