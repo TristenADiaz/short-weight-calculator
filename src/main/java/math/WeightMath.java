@@ -12,7 +12,7 @@ public class WeightMath {
         TENDER("TENDER",5.98,0.9402),
         WING("WING",8.79,0.9121),
         BS_THIGH("BS THIGH",7.69,0.9231),
-        LEG_MEAT("LEG MEAT",10.13,0.8987);
+        WL("WL",10.13,0.8987);
 
         String product;
         double percentage;
@@ -42,9 +42,11 @@ public class WeightMath {
         try {
             int weight = isCardboard ? (toteWeight -CARDBOARD_TOTE) : (toteWeight - PLASTIC_TOTE);
             int shortWeight = Math.toIntExact(Math.round(weight * tote.getTare()));
-            System.out.println(shortWeight);
+            System.out.println(toteWeight);
             System.out.println(weight);
+            System.out.println(shortWeight);
             System.out.println(tote.getTare());
+            System.out.println("isCardboard: "+isCardboard);
             res = shortWeight;
         } catch (Exception e) {
             throw new RuntimeException(e);
